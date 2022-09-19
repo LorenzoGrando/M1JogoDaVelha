@@ -10,6 +10,7 @@ namespace M1JogoDaVelha
             string jogando = "S";
             string[,] espacos;
 
+            //Repete o jogo e pede o modo de jogo ao jogador.
             while (jogando == "S")
             {
                 string modoDeJogo;
@@ -42,6 +43,7 @@ namespace M1JogoDaVelha
 
         }
 
+        // Faz o quiz.
         static string Jogar(string[,] espacoDeJogo, bool aiEnabled)
         {
             string jogadorAtual = "X";
@@ -51,11 +53,12 @@ namespace M1JogoDaVelha
 
             PrintarJogo(espacoDeJogo);
 
+            //Repete até se ter um vencedor.
             while (vencedor == "N/A")
             {
                 bool jogadorMudou = false;
                 
-
+                //Faz as jogadas.
                 if(aiEnabled == true && aiTurn == true)
                 {
                     espacoDeJogo = FazerJogadaAI(espacoDeJogo, jogadorAtual);
@@ -65,9 +68,10 @@ namespace M1JogoDaVelha
                 {
                     espacoDeJogo = FazerJogada(espacoDeJogo, jogadorAtual);
                 }
-                
+                //Mostra o tabuleiro
                 PrintarJogo(espacoDeJogo);
 
+                //Altera o jogador.
                 if (jogadorAtual == "X" && jogadorMudou == false)
                 {
                     jogadorAtual = "O";
@@ -83,8 +87,10 @@ namespace M1JogoDaVelha
 
                 }
 
+                //Checa vencedor
                 vencedor = ChecarVitoria(espacoDeJogo);
-
+                
+                //Empata a partida se não há vencedor após preencher o tabuleiro.
                 if (turnos == 8 && vencedor == "N/A")
                 {
                     vencedor = "Empate!";
@@ -92,6 +98,7 @@ namespace M1JogoDaVelha
                 turnos++;
             }
 
+            //Abaixo, mostra vencedor e pede para repetir o jogo.
             Console.WriteLine("\n E o resultado é: ");
 
             if (vencedor != "Empate!")
@@ -114,6 +121,8 @@ namespace M1JogoDaVelha
 
             return respostaRejogar;
         }
+
+        //Faz a jogada do jogador.
         static string[,] FazerJogada(string[,] campo, string jogador)
         {
             int linhaJogada;
@@ -141,6 +150,7 @@ namespace M1JogoDaVelha
             return campo;
         }
 
+        //Faz a Jogada da IA.
         static string[,] FazerJogadaAI(string[,] campoAI, string jogadorAI)
         {
             int linhaGerada;
@@ -148,6 +158,7 @@ namespace M1JogoDaVelha
             var rngGerador = new Random();
             int valorAleatorio;
 
+            //Checa se a IA tem um lança que ganha o jogo.
             for(int iteradorLinha = 0; iteradorLinha < 3; iteradorLinha++)
             {
                 for(int iteradorColuna = 0; iteradorColuna < 3; iteradorColuna++)
@@ -167,7 +178,7 @@ namespace M1JogoDaVelha
                 }
             }
 
-
+            // Se não houver nenhum, checa se o oponente consegue ganhar o jogo.
             for (int iteradorLinhaDerrota = 0; iteradorLinhaDerrota < 3; iteradorLinhaDerrota++)
             {
                 for (int iteradorColunaDerrota = 0; iteradorColunaDerrota < 3; iteradorColunaDerrota++)
@@ -189,7 +200,7 @@ namespace M1JogoDaVelha
                 }
             }
 
-
+            // Se ambos forem falso, gera um lugar aleatorio vazio.
             do
             {
                 valorAleatorio = rngGerador.Next(0, 3);
@@ -207,6 +218,7 @@ namespace M1JogoDaVelha
         {
             for(int i = 0; i < tabuleiroAtual.GetLength(0); i++)
             {
+                //Checa se algum jogador ganhou horizontalmente
                 if (tabuleiroAtual[i,0] == tabuleiroAtual[i,1] && tabuleiroAtual[i,0] == tabuleiroAtual[i, 2] && tabuleiroAtual[i,0] != " ")
                 {
                     if (tabuleiroAtual[i,0] == "X")
@@ -220,6 +232,7 @@ namespace M1JogoDaVelha
                     }
                 }
 
+                // Verticalmente
                 else if (tabuleiroAtual[0,i] == tabuleiroAtual[1,i] && tabuleiroAtual[0,i] == tabuleiroAtual[2,i] && tabuleiroAtual[0,i] != " ")
                 {
                     if (tabuleiroAtual[0, i] == "X")
@@ -233,7 +246,7 @@ namespace M1JogoDaVelha
                     }
                 }
             }
-
+            // E nas diagonais
             if (tabuleiroAtual[0,0] == tabuleiroAtual[1,1] && tabuleiroAtual[0,0] == tabuleiroAtual[2,2] && tabuleiroAtual[0,0] != " ")
             {
                 if (tabuleiroAtual[0, 0] == "X")
@@ -262,6 +275,8 @@ namespace M1JogoDaVelha
             return "N/A";
 
         }
+
+        //Mostra o tabuleiro
         static void PrintarJogo(string[,] campoAtual)
         {
             Console.Clear();
